@@ -196,7 +196,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.0800018, y: -59.59999}
+  m_AnchoredPosition: {x: 1.0800171, y: -59.59999}
   m_SizeDelta: {x: -2.1600037, y: -177.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &519420028
@@ -635,6 +635,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Question Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 2628924206424843503, guid: f1098c0d9773c4e43937db21c0bf72e7,
+        type: 3}
+      propertyPath: m_Text
+      value: This is a placeholder
+      objectReference: {fileID: 0}
+    - target: {fileID: 2628924206424843503, guid: f1098c0d9773c4e43937db21c0bf72e7,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2628924206424843503, guid: f1098c0d9773c4e43937db21c0bf72e7,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8825764977385575859, guid: f1098c0d9773c4e43937db21c0bf72e7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -693,7 +708,7 @@ PrefabInstance:
     - target: {fileID: 8825764977385575859, guid: f1098c0d9773c4e43937db21c0bf72e7,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8825764977385575859, guid: f1098c0d9773c4e43937db21c0bf72e7,
         type: 3}
@@ -739,21 +754,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2628924206424843503, guid: f1098c0d9773c4e43937db21c0bf72e7,
-        type: 3}
-      propertyPath: m_Text
-      value: This is a placeholder
-      objectReference: {fileID: 0}
-    - target: {fileID: 2628924206424843503, guid: f1098c0d9773c4e43937db21c0bf72e7,
-        type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 2628924206424843503, guid: f1098c0d9773c4e43937db21c0bf72e7,
-        type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 292589834466980435, guid: f1098c0d9773c4e43937db21c0bf72e7,
         type: 3}
@@ -843,12 +843,12 @@ PrefabInstance:
     - target: {fileID: 4335597436961523215, guid: 073366341a323ff4c862a972f5d0198c,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -5.3
+      value: -5.299988
       objectReference: {fileID: 0}
     - target: {fileID: 4335597436961523215, guid: 073366341a323ff4c862a972f5d0198c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -59.6
+      value: -59.600006
       objectReference: {fileID: 0}
     - target: {fileID: 4335597436961523215, guid: 073366341a323ff4c862a972f5d0198c,
         type: 3}
