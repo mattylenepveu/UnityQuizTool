@@ -34,6 +34,8 @@ public class QuizManager : MonoBehaviour
     [SerializeField]
     private Animator m_anim;
 
+    private ScoreManager m_scoreManager;
+
     // Indicates the waiting time between questions in seconds
     [SerializeField]
     private float m_fTimeBetweenQuestions = 1.0f;
@@ -49,6 +51,15 @@ public class QuizManager : MonoBehaviour
             // Puts all inputted questions into the unanswered list
             m_unanswered = m_questions.ToList<Question>();
         }
+
+        m_scoreManager = GetComponent<ScoreManager>();
+
+        if (m_scoreManager == null)
+        {
+            Debug.Log("NO SCORE MANAGER!");
+        }
+
+        m_scoreManager.ResetScore();
 
         // Calls set question function for UI to show first question
         SetCurrentQuestion();
@@ -96,14 +107,10 @@ public class QuizManager : MonoBehaviour
         // Triggers the animator to run the true animation
         m_anim.SetTrigger("True");
 
-        /*if (m_current.m_bIsTrue)
+        if (m_current.m_bIsTrue)
         {
-            Debug.Log("CORRECT!");
+            m_scoreManager.AddOneToScore();
         }
-        else
-        {
-            Debug.Log("WRONG!");
-        }*/
 
         // Quiz waits however long the QuestionTransition function returns
         StartCoroutine(QuestionTransition());
@@ -117,14 +124,10 @@ public class QuizManager : MonoBehaviour
         // Triggers the animator to run the false animation
         m_anim.SetTrigger("False");
 
-        /*if (m_current.m_bIsTrue)
+        if (!m_current.m_bIsTrue)
         {
-            Debug.Log("WRONG!");
+            m_scoreManager.AddOneToScore();
         }
-        else
-        {
-            Debug.Log("CORRECT!");
-        }*/
 
         // Quiz waits however long the QuestionTransition function returns
         StartCoroutine(QuestionTransition());
@@ -144,7 +147,14 @@ public class QuizManager : MonoBehaviour
         // Code waits the amount of seconds being passed in before moving to next line
         yield return new WaitForSeconds(m_fTimeBetweenQuestions);
 
-        // Reloads the scene so the next question can be displayed
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (m_unanswered.Count == 0)
+        {
+            Debug.Log("FIN");
+        }
+        else
+        {
+            // Reloads the scene so the next question can be displayed
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }
