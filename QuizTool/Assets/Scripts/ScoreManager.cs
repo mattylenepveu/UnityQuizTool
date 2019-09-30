@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-// Creates the class for the ScoreManager
 public class ScoreManager : MonoBehaviour
 {
     // Integer stores the user's score for the quiz
@@ -19,9 +18,6 @@ public class ScoreManager : MonoBehaviour
         m_nScore = 0;
     }
 
-    //--------------------------------------------------------------------------------
-    // Function adds one to score and is called when user gets a question correct.
-    //--------------------------------------------------------------------------------
     public void AddOneToScore()
     {
         m_nScore++;
@@ -38,15 +34,9 @@ public class ScoreManager : MonoBehaviour
         return m_nScore;
     }
 
-    //--------------------------------------------------------------------------------
-    // Function allows other classes to set a value for the questions integer.
-    //
-    // Param:
-    //      nAmount: An integer that represents the new value of questions int.
-    //--------------------------------------------------------------------------------
-    public void SetQuestionsAmount(int nAmount)
+    public void SetQuestionsAmount(int nQuestionsAmount)
     {
-        m_nQuestionsAmount = nAmount;
+        m_nQuestionsAmount = nQuestionsAmount;
     }
 
     //--------------------------------------------------------------------------------

@@ -373,6 +373,18 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1204367257 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2200168415119041444, guid: 073366341a323ff4c862a972f5d0198c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8598715268678121728}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1269459892
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,8 +425,10 @@ MonoBehaviour:
   m_questionText: {fileID: 649962915}
   m_trueAnswerText: {fileID: 333763030}
   m_falseAnswerText: {fileID: 557714825}
-  m_anim: {fileID: 1827858345}
-  m_fTimeBetweenQuestions: 1
+  m_trueButton: {fileID: 1295007714}
+  m_falseButton: {fileID: 1204367257}
+  m_fTimeBetweenQuestions: 3
+  m_fFlashRate: 0.08
 --- !u!4 &1269459894
 Transform:
   m_ObjectHideFlags: 0
@@ -438,11 +452,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1269459892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8be80ab4d4e193e4182e019a5413afff, type: 3}
+  m_Script: {fileID: 11500000, guid: c2c92f314c948414bb5c2df197f72e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_nScore: 0
   m_nQuestionsAmount: 0
+--- !u!114 &1295007714 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 725426836953952323, guid: d336897538bd7ad47a309066064fa071,
+    type: 3}
+  m_PrefabInstance: {fileID: 8968960617730925407}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1808619318
 GameObject:
   m_ObjectHideFlags: 0

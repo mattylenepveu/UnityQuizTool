@@ -30,39 +30,94 @@ public class QuizManager : MonoBehaviour
     [SerializeField]
     private Text m_falseAnswerText;
 
-    // Stores the animator so animations can be displayed in the quiz
     [SerializeField]
-    private Animator m_anim;
+    private Image m_trueButton;
 
-    private ScoreManager m_scoreManager;
+    [SerializeField]
+    private Image m_falseButton;
+
+    private static ScoreManager m_scoreManager;
 
     // Indicates the waiting time between questions in seconds
     [SerializeField]
-    private float m_fTimeBetweenQuestions = 1.0f;
+    private float m_fTimeBetweenQuestions = 3.0f;
+
+    private float m_fTimer;
+
+    [SerializeField]
+    private float m_fFlashRate = 0.02f;
+
+    private bool m_bTrueSelected;
+
+    private bool m_bFalseSelected;
 
     //--------------------------------------------------------------------------------
     // Function is called when script is first called.
     //--------------------------------------------------------------------------------
     private void Start()
     {
+        m_scoreManager = GetComponent<ScoreManager>();
+
+        m_fTimer = 0.0f;
+
+        m_bTrueSelected = false;
+
+        m_bFalseSelected = false;
+
+        m_trueButton.color = Color.white;
+
         // Checks if there are any questions in the unanswered questions list
         if (m_unanswered == null || m_unanswered.Count == 0)
         {
             // Puts all inputted questions into the unanswered list
             m_unanswered = m_questions.ToList<Question>();
+
+            m_scoreManager.ResetScore();
+
+            m_scoreManager.SetQuestionsAmount(m_unanswered.Count);
         }
-
-        m_scoreManager = GetComponent<ScoreManager>();
-
-        if (m_scoreManager == null)
-        {
-            Debug.Log("NO SCORE MANAGER!");
-        }
-
-        m_scoreManager.ResetScore();
 
         // Calls set question function for UI to show first question
         SetCurrentQuestion();
+    }
+
+    private void Update()
+    {
+        if (m_bTrueSelected)
+        {
+            // Checks if the true button was selected
+            if (m_current.m_bIsTrue)
+            {
+                CorrectAnswer(true);
+            }
+            // Else calls the wrong answer function if the false button was selected
+            else
+            {
+                WrongAnswer(true);
+            }
+
+            // Quiz waits however long the QuestionTransition function returns
+            StartCoroutine(QuestionTransition());
+        }
+        
+        if (m_bFalseSelected)
+        {
+            // Checks if the false button was selected
+            if (!m_current.m_bIsTrue)
+            {
+                CorrectAnswer(false);
+
+                m_scoreManager.AddOneToScore();
+            }
+            // Else calls the wrong answer function if the true button was selected
+            else
+            {
+                WrongAnswer(false);
+            }
+
+            // Quiz waits however long the QuestionTransition function returns
+            StartCoroutine(QuestionTransition());
+        }
     }
 
     //--------------------------------------------------------------------------------
@@ -104,16 +159,7 @@ public class QuizManager : MonoBehaviour
     //--------------------------------------------------------------------------------
     public void UserSelectTrue()
     {
-        // Triggers the animator to run the true animation
-        m_anim.SetTrigger("True");
-
-        if (m_current.m_bIsTrue)
-        {
-            m_scoreManager.AddOneToScore();
-        }
-
-        // Quiz waits however long the QuestionTransition function returns
-        StartCoroutine(QuestionTransition());
+        m_bTrueSelected = true;
     }
 
     //--------------------------------------------------------------------------------
@@ -121,16 +167,7 @@ public class QuizManager : MonoBehaviour
     //--------------------------------------------------------------------------------
     public void UserSelectFalse()
     {
-        // Triggers the animator to run the false animation
-        m_anim.SetTrigger("False");
-
-        if (!m_current.m_bIsTrue)
-        {
-            m_scoreManager.AddOneToScore();
-        }
-
-        // Quiz waits however long the QuestionTransition function returns
-        StartCoroutine(QuestionTransition());
+        m_bFalseSelected = true;
     }
 
     //--------------------------------------------------------------------------------
@@ -155,6 +192,66 @@ public class QuizManager : MonoBehaviour
         {
             // Reloads the scene so the next question can be displayed
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    private void CorrectAnswer(bool bSelectedAnswer)
+    {
+        if (bSelectedAnswer)
+        {
+            m_fTimer += Time.deltaTime;
+
+            if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
+            {
+                m_trueButton.color = Color.green;
+            }
+            else
+            {
+                m_trueButton.color = Color.white;
+            }
+        }
+        else
+        {
+            m_fTimer += Time.deltaTime;
+
+            if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
+            {
+                m_falseButton.color = Color.green;
+            }
+            else
+            {
+                m_falseButton.color = Color.white;
+            }
+        }
+    }
+
+    private void WrongAnswer(bool bSelectedAnswer)
+    {
+        if (bSelectedAnswer)
+        {
+            m_fTimer += Time.deltaTime;
+
+            if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
+            {
+                m_trueButton.color = Color.grey;
+            }
+            else
+            {
+                m_trueButton.color = Color.white;
+            }
+        }
+        else
+        {
+            m_fTimer += Time.deltaTime;
+
+            if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
+            {
+                m_falseButton.color = Color.grey;
+            }
+            else
+            {
+                m_falseButton.color = Color.white;
+            }
         }
     }
 }
