@@ -15,56 +15,59 @@ public class QuizManager : MonoBehaviour
     // List stores all the unanswered questions in the quiz
     private static List<Question> m_unanswered;
 
+    // An enumerator that indicates if true, false or no answer has been selected
+    private enum ENUM_QUIZSTATE { Unselected, TrueSelected, FalseSelected };
+
+    // Provides a reference to the quiz state enumerator
+    private ENUM_QUIZSTATE m_quizState;
+
     // Represents the current question that needs to be displayed
     private Question m_current;
 
     // Field represents the text where the question will be shown
     [SerializeField]
     private Text m_questionText;
-    
-    // Shows either correct or wrong indicating whether true is correct for a question
-    [SerializeField]
-    private Text m_trueAnswerText;
 
-    // Shows either correct or wrong indicating whether false is right for a question
-    [SerializeField]
-    private Text m_falseAnswerText;
-
+    // Represents the true button as an image
     [SerializeField]
     private Image m_trueButton;
 
+    // Image represents the false button in the quiz
     [SerializeField]
     private Image m_falseButton;
 
+    // Static variable gives the script access to the score manager script
     private static ScoreManager m_scoreManager;
 
-    // Indicates the waiting time between questions in seconds
+    // Indicates the waiting time between questions once an answer has been selected
+    [Range(1.0f, 5.0f)]
     [SerializeField]
-    private float m_fTimeBetweenQuestions = 3.0f;
+    private float m_fTimeBetweenQuestions;
 
+    // Represents how quickly the button colour will change once selected
+    [Range(10.0f, 20.0f)]
+    [SerializeField]
+    private float m_fFlashRate;
+
+    // Keeps track of the time to calculate sin for the flashing
     private float m_fTimer;
-
-    [SerializeField]
-    private float m_fFlashRate = 0.02f;
-
-    private bool m_bTrueSelected;
-
-    private bool m_bFalseSelected;
 
     //--------------------------------------------------------------------------------
     // Function is called when script is first called.
     //--------------------------------------------------------------------------------
     private void Start()
     {
+        // Gets the scoremanager script component off the same object this script is on
         m_scoreManager = GetComponent<ScoreManager>();
 
+        // Sets the timer to zero as a default value
         m_fTimer = 0.0f;
 
-        m_bTrueSelected = false;
+        // Sets the flash rate as the reciprical of itself
+        m_fFlashRate = 1 / m_fFlashRate;
 
-        m_bFalseSelected = false;
-
-        m_trueButton.color = Color.white;
+        // Initially sets the quiz state to be unselected
+        m_quizState = ENUM_QUIZSTATE.Unselected;
 
         // Checks if there are any questions in the unanswered questions list
         if (m_unanswered == null || m_unanswered.Count == 0)
@@ -72,25 +75,34 @@ public class QuizManager : MonoBehaviour
             // Puts all inputted questions into the unanswered list
             m_unanswered = m_questions.ToList<Question>();
 
+            // Resets the score in case a new quiz has been started
             m_scoreManager.ResetScore();
 
+            // Sets the amount of questions in the score manager to equal the unanswered count
             m_scoreManager.SetQuestionsAmount(m_unanswered.Count);
         }
+
+        Debug.Log(m_scoreManager.GetScore());
 
         // Calls set question function for UI to show first question
         SetCurrentQuestion();
     }
 
+    //--------------------------------------------------------------------------------
+    // Function is called every frame and updates the scene when called.
+    //--------------------------------------------------------------------------------
     private void Update()
     {
-        if (m_bTrueSelected)
+        // Detects if the true button has been selected
+        if (m_quizState == ENUM_QUIZSTATE.TrueSelected)
         {
             // Checks if the true button was selected
             if (m_current.m_bIsTrue)
             {
+                // Calls correct answer function passing in true as true was selected
                 CorrectAnswer(true);
             }
-            // Else calls the wrong answer function if the false button was selected
+            // Else calls the wrong answer function and passes in true as true was selected
             else
             {
                 WrongAnswer(true);
@@ -99,17 +111,17 @@ public class QuizManager : MonoBehaviour
             // Quiz waits however long the QuestionTransition function returns
             StartCoroutine(QuestionTransition());
         }
-        
-        if (m_bFalseSelected)
+
+        // Checks to see if the false button has been selected
+        if (m_quizState == ENUM_QUIZSTATE.FalseSelected)
         {
             // Checks if the false button was selected
             if (!m_current.m_bIsTrue)
             {
+                // Calls correct answer function passing in false as false was selected
                 CorrectAnswer(false);
-
-                m_scoreManager.AddOneToScore();
             }
-            // Else calls the wrong answer function if the true button was selected
+            // Else calls the wrong answer function and passes in false as that was selected
             else
             {
                 WrongAnswer(false);
@@ -133,25 +145,6 @@ public class QuizManager : MonoBehaviour
 
         // Calls the current question's string and stores as the question text for the UI
         m_questionText.text = m_current.m_strQuestion;
-
-        // Checks if the current question is true
-        if (m_current.m_bIsTrue)
-        {
-            // Sets text to correct if the user answers true
-            m_trueAnswerText.text = "CORRECT!";
-
-            // Sets text to wrong if the user answers false
-            m_falseAnswerText.text = "WRONG!";
-        }
-        // Else if the current question is false
-        else
-        {
-            // Sets text to wrong if the user answers true
-            m_trueAnswerText.text = "WRONG!";
-
-            // Sets text to correct if the user answers false
-            m_falseAnswerText.text = "CORRECT!";
-        }
     }
 
     //--------------------------------------------------------------------------------
@@ -159,7 +152,12 @@ public class QuizManager : MonoBehaviour
     //--------------------------------------------------------------------------------
     public void UserSelectTrue()
     {
-        m_bTrueSelected = true;
+        m_quizState = ENUM_QUIZSTATE.TrueSelected;
+
+        if (m_current.m_bIsTrue)
+        {
+            m_scoreManager.AddOneToScore();
+        }
     }
 
     //--------------------------------------------------------------------------------
@@ -167,7 +165,12 @@ public class QuizManager : MonoBehaviour
     //--------------------------------------------------------------------------------
     public void UserSelectFalse()
     {
-        m_bFalseSelected = true;
+        m_quizState = ENUM_QUIZSTATE.FalseSelected;
+
+        if (!m_current.m_bIsTrue)
+        {
+            m_scoreManager.AddOneToScore();
+        }
     }
 
     //--------------------------------------------------------------------------------
@@ -184,40 +187,52 @@ public class QuizManager : MonoBehaviour
         // Code waits the amount of seconds being passed in before moving to next line
         yield return new WaitForSeconds(m_fTimeBetweenQuestions);
 
+        // Loads the results scene if there are no questions left in the unanswered list
         if (m_unanswered.Count == 0)
         {
             Debug.Log("FIN");
         }
+        // Else reloads the scene so the next question can be displayed
         else
         {
-            // Reloads the scene so the next question can be displayed
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
+    //--------------------------------------------------------------------------------
+    // Function makes the correct answer button flash green when clicked.
+    //
+    // Param:
+    //      bSelectedAnswer: A bool indicating if true or false was selected.
+    //--------------------------------------------------------------------------------
     private void CorrectAnswer(bool bSelectedAnswer)
     {
+        // Timer begins counting up for sin calculations for flash
+        m_fTimer += Time.deltaTime;
+
+        // Checks to see if true was selected by the user
         if (bSelectedAnswer)
         {
-            m_fTimer += Time.deltaTime;
-
+            // Turns the true button green if answer to sin is positive
             if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
             {
                 m_trueButton.color = Color.green;
             }
+            // Else adds no colour to the true button if sin is negative
             else
             {
                 m_trueButton.color = Color.white;
             }
         }
+        // Else if false was the chosen answer
         else
         {
-            m_fTimer += Time.deltaTime;
-
+            // Turns the false button green if answer to sin is positive
             if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
             {
                 m_falseButton.color = Color.green;
             }
+            // Else adds no colour to the false button if sin is negative
             else
             {
                 m_falseButton.color = Color.white;
@@ -225,29 +240,40 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------
+    // Function makes the wrong answer button flash grey when clicked.
+    //
+    // Param:
+    //      bSelectedAnswer: A bool indicating if true or false was selected.
+    //--------------------------------------------------------------------------------
     private void WrongAnswer(bool bSelectedAnswer)
     {
+        // Timer begins counting up for sin calculations for flash
+        m_fTimer += Time.deltaTime;
+
+        // Checks to see if true was selected by the user
         if (bSelectedAnswer)
         {
-            m_fTimer += Time.deltaTime;
-
+            // Turns the true button grey if answer to sin is positive
             if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
             {
                 m_trueButton.color = Color.grey;
             }
+            // Else adds no colour to the true button if sin is negative
             else
             {
                 m_trueButton.color = Color.white;
             }
         }
+        // Else if false was the chosen answer
         else
         {
-            m_fTimer += Time.deltaTime;
-
+            // Turns the false button grey if answer to sin is positive
             if (Mathf.Sin(m_fTimer / m_fFlashRate) >= 0)
             {
                 m_falseButton.color = Color.grey;
             }
+            // Else adds no colour to the false button if sin is negative
             else
             {
                 m_falseButton.color = Color.white;

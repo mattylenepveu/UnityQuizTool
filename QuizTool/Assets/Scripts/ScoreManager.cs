@@ -4,11 +4,11 @@ public class ScoreManager : MonoBehaviour
 {
     // Integer stores the user's score for the quiz
     [SerializeField]
-    private int m_nScore;
+    private static int m_nScore;
 
     // Integer indicates how many questions there are in a quiz
     [SerializeField]
-    private int m_nQuestionsAmount;
+    private static int m_nQuestionsAmount;
 
     //--------------------------------------------------------------------------------
     // Function resets the score to zero when quiz is restarted, exited or completed.
@@ -18,6 +18,9 @@ public class ScoreManager : MonoBehaviour
         m_nScore = 0;
     }
 
+    //--------------------------------------------------------------------------------
+    // Function allows other classes to set the value of the questions amount int.
+    //--------------------------------------------------------------------------------
     public void AddOneToScore()
     {
         m_nScore++;
@@ -34,6 +37,12 @@ public class ScoreManager : MonoBehaviour
         return m_nScore;
     }
 
+    //--------------------------------------------------------------------------------
+    // Function allows other classes to set the value of the questions amount int.
+    //
+    // Param:
+    //      nQuestionsAmount: An int representing how many questions are in the quiz.
+    //--------------------------------------------------------------------------------
     public void SetQuestionsAmount(int nQuestionsAmount)
     {
         m_nQuestionsAmount = nQuestionsAmount;
