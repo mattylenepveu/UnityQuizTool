@@ -28,6 +28,14 @@ public class QuizManager : MonoBehaviour
     [SerializeField]
     private Text m_questionText;
 
+    // Varaiable allows the text that displays the score to be changed in this script
+    [SerializeField]
+    private Text m_playerScore;
+
+    // Allows the text that displays the total questions to be changed in this script
+    [SerializeField]
+    private Text m_totalQuestions;
+
     // Represents the true button as an image
     [SerializeField]
     private Image m_trueButton;
@@ -51,6 +59,15 @@ public class QuizManager : MonoBehaviour
 
     // Keeps track of the time to calculate sin for the flashing
     private float m_fTimer;
+
+    // Stores the amount of questions involved in the quiz
+    private static int m_nTotalQuestions;
+
+    // Keeps track of the score throughout the quiz
+    private static int m_nPlayerScore;
+
+    [SerializeField]
+    private int m_nResultsIndex;
 
     //--------------------------------------------------------------------------------
     // Function is called when script is first called.
@@ -82,7 +99,17 @@ public class QuizManager : MonoBehaviour
             m_scoreManager.SetQuestionsAmount(m_unanswered.Count);
         }
 
-        Debug.Log(m_scoreManager.GetScore());
+        // Obtains the score from the score manager which should be zero here
+        m_nPlayerScore = m_scoreManager.GetScore();
+
+        // Updates the score to the canvas by converting the score int to a string
+        m_playerScore.text = m_nPlayerScore.ToString();
+
+        // Stores the amount of questions in a new variable 
+        m_nTotalQuestions = m_scoreManager.GetQuestionsAmount();
+
+        // Converts last int to a string then applies that to the total questions UI text
+        m_totalQuestions.text = m_nTotalQuestions.ToString();
 
         // Calls set question function for UI to show first question
         SetCurrentQuestion();
@@ -152,11 +179,17 @@ public class QuizManager : MonoBehaviour
     //--------------------------------------------------------------------------------
     public void UserSelectTrue()
     {
-        m_quizState = ENUM_QUIZSTATE.TrueSelected;
-
-        if (m_current.m_bIsTrue)
+        // Makes sure that this is the first time a button has been clicked
+        if (m_quizState == ENUM_QUIZSTATE.Unselected)
         {
-            m_scoreManager.AddOneToScore();
+            // Sets the quiz state to state the the true button has been selected
+            m_quizState = ENUM_QUIZSTATE.TrueSelected;
+
+            // Adds a point to the score if true is the correct answer to question
+            if (m_current.m_bIsTrue)
+            {
+                AddPointToScore();
+            }
         }
     }
 
@@ -165,11 +198,17 @@ public class QuizManager : MonoBehaviour
     //--------------------------------------------------------------------------------
     public void UserSelectFalse()
     {
-        m_quizState = ENUM_QUIZSTATE.FalseSelected;
-
-        if (!m_current.m_bIsTrue)
+        // Makes sure that this is the first time a button has been clicked
+        if (m_quizState == ENUM_QUIZSTATE.Unselected)
         {
-            m_scoreManager.AddOneToScore();
+            // Sets the quiz state to state the the true button has been selected
+            m_quizState = ENUM_QUIZSTATE.FalseSelected;
+
+            // Adds a point to the score if false is the correct answer to question
+            if (!m_current.m_bIsTrue)
+            {
+                AddPointToScore();
+            }
         }
     }
 
@@ -190,7 +229,7 @@ public class QuizManager : MonoBehaviour
         // Loads the results scene if there are no questions left in the unanswered list
         if (m_unanswered.Count == 0)
         {
-            Debug.Log("FIN");
+            SceneManager.LoadScene(m_nResultsIndex);
         }
         // Else reloads the scene so the next question can be displayed
         else
@@ -279,5 +318,20 @@ public class QuizManager : MonoBehaviour
                 m_falseButton.color = Color.white;
             }
         }
+    }
+
+    //--------------------------------------------------------------------------------
+    // Adds a point to the score and updates the score for all components.
+    //--------------------------------------------------------------------------------
+    private void AddPointToScore()
+    {
+        // Adds a point to the player score in the score manager
+        m_scoreManager.AddOneToScore();
+
+        // Obtains and stores the newly updated score in player score int
+        m_nPlayerScore = m_scoreManager.GetScore();
+
+        // Updates the score to the canvas by converting the score int to a string
+        m_playerScore.text = m_nPlayerScore.ToString();
     }
 }
