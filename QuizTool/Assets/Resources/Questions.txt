@@ -1,0 +1,6 @@
+Bananas are my favourite fruit
+True
+2 + 2 = 4
+True
+The moon landing occured 40 years ago
+False
