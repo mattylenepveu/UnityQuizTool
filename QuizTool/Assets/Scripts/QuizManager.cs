@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class QuizManager : MonoBehaviour
 {
     // Initializes an array of questions where users can create questions in inspector
-    public Question[] m_questions;
+    private static Question[] m_questions;
 
     // List stores all the unanswered questions in the quiz
     private static List<Question> m_unanswered;
@@ -47,6 +47,8 @@ public class QuizManager : MonoBehaviour
     // Static variable gives the script access to the score manager script
     private static ScoreManager m_scoreManager;
 
+    private static LoadQuestions m_loadQuestions;
+
     // Indicates the waiting time between questions once an answer has been selected
     [Range(1.0f, 5.0f)]
     [SerializeField]
@@ -77,6 +79,8 @@ public class QuizManager : MonoBehaviour
         // Gets the scoremanager script component off the same object this script is on
         m_scoreManager = GetComponent<ScoreManager>();
 
+        m_loadQuestions = GetComponent<LoadQuestions>();
+
         // Sets the timer to zero as a default value
         m_fTimer = 0.0f;
 
@@ -89,6 +93,8 @@ public class QuizManager : MonoBehaviour
         // Checks if there are any questions in the unanswered questions list
         if (m_unanswered == null || m_unanswered.Count == 0)
         {
+            m_questions = m_loadQuestions.GetQuestions();
+
             // Puts all inputted questions into the unanswered list
             m_unanswered = m_questions.ToList<Question>();
 

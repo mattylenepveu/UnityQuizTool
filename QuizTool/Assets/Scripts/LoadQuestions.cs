@@ -3,31 +3,51 @@ using UnityEngine;
 
 public class LoadQuestions : MonoBehaviour
 {
-    public string m_strData = "Questions";
-    private string m_strContents;
-    private TextAsset m_txtAsset;
+    public string m_strFileName = "Questions";
+
+    private static Question[] m_questions;
+
+    private string[] m_strContents;
+
+    private int m_nTotalQuestions;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_txtAsset = (TextAsset)Resources.Load(m_strData);
-        m_strContents = m_txtAsset.text;
-    }
+        m_strContents = System.IO.File.ReadAllLines("./Assets/Resources/" + m_strFileName + ".txt");
 
-    // Update is called once per frame
-    void OnGUI()
-    {
-        GUILayout.Label(m_strContents);
+        m_nTotalQuestions = m_strContents.Length / 2;
+
+        m_questions = new Question[m_nTotalQuestions];
+
+        ReadTextFile();
     }
 
     public void ReadTextFile()
     {
-        // Split questions into a list 
+        for (int i = 0; i < m_nTotalQuestions; i++)
+        {
+            int nTemp = i * 2;
+            int nTempTwo = (i * 2) + 1;
 
-        // Initiate for loop that iterates through for the amount of questions
+            if (m_strContents[nTempTwo] == "t" || m_strContents[nTempTwo] == "T")
+            {
+                m_questions[i] = new Question(m_strContents[nTemp], true);
+            }
+            else
+            {
+                m_questions[i] = new Question(m_strContents[nTemp], false);
+            }
+        }
+    }
 
-        // Make sure the text file has questions in it
+    public Question[] GetQuestions()
+    {
+        return m_questions;
+    }
 
-        // Add questions from text file to questions array one by one
+    public int GetTotalQuestions()
+    {
+        return m_nTotalQuestions;
     }
 }

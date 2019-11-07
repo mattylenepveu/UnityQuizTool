@@ -1,4 +1,4 @@
-﻿// Creates a class for each question, which can be seen in Unity's inspector
+﻿// Creates a class for each question
 [System.Serializable]
 public class Question
 {
@@ -7,4 +7,10 @@ public class Question
 
     // Boolean indicates whether the question is true or false
     public bool m_bIsTrue;
+
+    public Question(string strQuestion, bool bIsTrue)
+    {
+        this.m_strQuestion = strQuestion;
+        this.m_bIsTrue = bIsTrue;
+    }
 }
