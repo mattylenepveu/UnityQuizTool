@@ -25,6 +25,7 @@ public class Results : MonoBehaviour
     // Stores the amount of questions involved in the quiz
     private static int m_nTotalQuestions;
 
+    // Indicates what the scene number is for the quiz in Build Settings
     [SerializeField]
     private int m_nQuizIndex;
 
@@ -49,6 +50,9 @@ public class Results : MonoBehaviour
         m_totalQuestions.text = m_nTotalQuestions.ToString();
     }
 
+    //--------------------------------------------------------------------------------
+    // Function loads the main quiz again when the restart button is pressed.
+    //--------------------------------------------------------------------------------
     public void RestartQuiz()
     {
         SceneManager.LoadScene(m_nQuizIndex);

@@ -47,6 +47,7 @@ public class QuizManager : MonoBehaviour
     // Static variable gives the script access to the score manager script
     private static ScoreManager m_scoreManager;
 
+    // Allows this script to access variables and functions from load questions script
     private static LoadQuestions m_loadQuestions;
 
     // Indicates the waiting time between questions once an answer has been selected
@@ -68,6 +69,7 @@ public class QuizManager : MonoBehaviour
     // Keeps track of the score throughout the quiz
     private static int m_nPlayerScore;
 
+    // Indicates what the scene number is for the results screen in Build Settings
     [SerializeField]
     private int m_nResultsIndex;
 
@@ -79,6 +81,7 @@ public class QuizManager : MonoBehaviour
         // Gets the scoremanager script component off the same object this script is on
         m_scoreManager = GetComponent<ScoreManager>();
 
+        // Accesses the Load Question script component
         m_loadQuestions = GetComponent<LoadQuestions>();
 
         // Sets the timer to zero as a default value
@@ -93,12 +96,13 @@ public class QuizManager : MonoBehaviour
         // Checks if there are any questions in the unanswered questions list
         if (m_unanswered == null || m_unanswered.Count == 0)
         {
+            // Accesses the questions sorted in the Load Question script
             m_questions = m_loadQuestions.GetQuestions();
 
-            // Puts all inputted questions into the unanswered list
+            // Puts all obtained questions into the unanswered list
             m_unanswered = m_questions.ToList<Question>();
 
-            // Resets the score in case a new quiz has been started
+            // Resets the score when a new quiz has been started
             m_scoreManager.ResetScore();
 
             // Sets the amount of questions in the score manager to equal the unanswered count
