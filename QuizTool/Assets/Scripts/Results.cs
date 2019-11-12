@@ -57,4 +57,12 @@ public class Results : MonoBehaviour
     {
         SceneManager.LoadScene(m_nQuizIndex);
     }
+
+    //--------------------------------------------------------------------------------
+    // Function closes the application when the exit button is pressed.
+    //--------------------------------------------------------------------------------
+    public void ExitQuiz()
+    {
+        Application.Quit();
+    }
 }

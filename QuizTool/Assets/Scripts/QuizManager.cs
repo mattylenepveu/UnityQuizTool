@@ -36,6 +36,9 @@ public class QuizManager : MonoBehaviour
     [SerializeField]
     private Text m_totalQuestions;
 
+    [SerializeField]
+    private Text m_questionNumber;
+
     // Represents the true button as an image
     [SerializeField]
     private Image m_trueButton;
@@ -68,6 +71,8 @@ public class QuizManager : MonoBehaviour
 
     // Keeps track of the score throughout the quiz
     private static int m_nPlayerScore;
+
+    private static int m_nQuestionNumber;
 
     // Indicates what the scene number is for the results screen in Build Settings
     [SerializeField]
@@ -107,6 +112,12 @@ public class QuizManager : MonoBehaviour
 
             // Sets the amount of questions in the score manager to equal the unanswered count
             m_scoreManager.SetQuestionsAmount(m_unanswered.Count);
+
+            m_nQuestionNumber = 1;
+        }
+        else
+        {
+            m_nQuestionNumber++;
         }
 
         // Obtains the score from the score manager which should be zero here
@@ -120,6 +131,8 @@ public class QuizManager : MonoBehaviour
 
         // Converts last int to a string then applies that to the total questions UI text
         m_totalQuestions.text = m_nTotalQuestions.ToString();
+
+        m_questionNumber.text = m_nQuestionNumber.ToString();
 
         // Calls set question function for UI to show first question
         SetCurrentQuestion();
