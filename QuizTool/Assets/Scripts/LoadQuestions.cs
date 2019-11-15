@@ -23,9 +23,18 @@ public class LoadQuestions : MonoBehaviour
     //--------------------------------------------------------------------------------
     void Start()
     {
-        // Reads and stores all lines individually from the file into the contents array
-        m_strContents = System.IO.File.ReadAllLines("./Assets/Resources/" + 
-                                                    m_strFileName + ".txt");
+        if (Application.isEditor)
+        {
+            // Reads and stores all lines individually from the file into the contents array
+            m_strContents = System.IO.File.ReadAllLines("./Assets/Resources/" +
+                                                        m_strFileName + ".txt");
+        }
+        else
+        {
+            // Reads and stores all lines individually from the file into the contents array
+            m_strContents = System.IO.File.ReadAllLines("./Resources/" +
+                                                        m_strFileName + ".txt");
+        }
 
         // Calculates the total questions by dividing the length of contents by two
         m_nTotalQuestions = m_strContents.Length / 2;
