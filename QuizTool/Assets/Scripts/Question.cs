@@ -1,4 +1,8 @@
-﻿// Creates a class for each question
+﻿//--------------------------------------------------------------------------------
+// Script creates a class where all questions for a quiz are managed.
+//--------------------------------------------------------------------------------
+
+// Creates a class for each question
 [System.Serializable]
 public class Question
 {

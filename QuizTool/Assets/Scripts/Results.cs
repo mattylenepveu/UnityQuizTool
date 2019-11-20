@@ -1,4 +1,8 @@
-﻿// Lists all the classes the Results will need
+﻿//--------------------------------------------------------------------------------
+// Script manages everything involved in the Results scene.
+//--------------------------------------------------------------------------------
+
+// Lists all the usings the Results script will need
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,4 +1,8 @@
-﻿// Lists all the classes the LoadQuestions will need
+﻿//--------------------------------------------------------------------------------
+// Script handles obtaining the questions from the text document.
+//--------------------------------------------------------------------------------
+
+// Lists all the usings the LoadQuestions script will need
 using System.Collections;
 using UnityEngine;
 
@@ -23,12 +27,14 @@ public class LoadQuestions : MonoBehaviour
     //--------------------------------------------------------------------------------
     void Start()
     {
+        // Detects if the program is being run from the editor
         if (Application.isEditor)
         {
             // Reads and stores all lines individually from the file into the contents array
             m_strContents = System.IO.File.ReadAllLines("./Assets/Resources/" +
                                                         m_strFileName + ".txt");
         }
+        // Else if program is running from an executable
         else
         {
             // Reads and stores all lines individually from the file into the contents array

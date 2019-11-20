@@ -1,4 +1,8 @@
-﻿// Lists all the classes the QuizManager will need
+﻿//--------------------------------------------------------------------------------
+// Script manages the logic of the main quiz.
+//--------------------------------------------------------------------------------
+
+// Lists all the usings the QuizManager will need
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

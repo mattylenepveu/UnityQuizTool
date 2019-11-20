@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//--------------------------------------------------------------------------------
+// Script holds all the functions regarding the score and amount of questions.
+//--------------------------------------------------------------------------------
+
+// Lists all the usings the Title script will need
+using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
